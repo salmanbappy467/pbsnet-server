@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pbsNet API Documentation - Complete Reference</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+        body { font-family: 'Hind Siliguri', sans-serif; background-color: #f8fafc; color: #334155; }
+        .method { font-family: 'JetBrains Mono', monospace; font-weight: bold; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; text-transform: uppercase; }
+        .get { color: #0284c7; background: #e0f2fe; border: 1px solid #bae6fd; }
+        .post { color: #16a34a; background: #dcfce7; border: 1px solid #bbf7d0; }
+        .put { color: #d97706; background: #fef3c7; border: 1px solid #fde68a; }
+        .patch { color: #9333ea; background: #f3e8ff; border: 1px solid #e9d5ff; }
+        .delete { color: #dc2626; background: #fee2e2; border: 1px solid #fecaca; }
+        
+        pre { background: #1e293b; color: #e2e8f0; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; border: 1px solid #334155; margin-top: 0.5rem; }
+        .endpoint-card { background: white; border-radius: 0.75rem; border: 1px solid #e2e8f0; margin-bottom: 2rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+        .endpoint-header { background: #f1f5f9; padding: 1rem 1.5rem; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; gap: 1rem; border-radius: 0.75rem 0.75rem 0 0; }
+        .section-title { font-size: 1.5rem; font-weight: 700; color: #0f172a; margin: 3rem 0 1.5rem; border-left: 5px solid #2563eb; padding-left: 1rem; }
+        .param-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
+        .param-table th { text-align: left; background: #f8fafc; padding: 8px; border-bottom: 2px solid #e2e8f0; }
+        .param-table td { padding: 8px; border-bottom: 1px solid #e2e8f0; }
+        .req-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #64748b; margin-top: 1.5rem; display: block; letter-spacing: 0.05em; }
+        code { font-family: 'JetBrains Mono', monospace; color: #ec4899; background: #fdf2f8; padding: 2px 5px; border-radius: 4px; font-size: 0.9em; }
+    </style>
+</head>
+<body class="antialiased pb-24">
+
+    <header class="bg-slate-900 text-white py-8 shadow-lg sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-6 flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold tracking-tight">pbsNet API Reference</h1>
+                <p class="text-slate-400 font-mono text-sm mt-1">Base URL: <span class="text-blue-400">https://api.pbsnet.com</span> (Local: http://localhost:5000)</p>
+            </div>
+            <div class="hidden md:block">
+                <span class="bg-blue-600 text-xs font-bold px-3 py-1 rounded-full">v1.0.0</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6">
+
+        <section id="auth">
+            <h2 class="section-title">১. অথেনটিকেশন (Authentication)</h2>
+            <p class="mb-6 text-slate-600">এই রাউটগুলো পাবলিক, অর্থাৎ এক্সেস করার জন্য কোনো টোকেন বা হেডারের প্রয়োজন নেই।</p>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <code class="text-lg text-slate-700 font-bold">/api/auth/register</code>
+                </div>
+                <div class="p-6">
+                    <p class="text-slate-700 mb-4">নতুন ইউজার রেজিস্ট্রেশন। এটি একই সাথে Appwrite Auth এবং ডাটাবেস প্রোফাইল তৈরি করে।</p>
+                    
+                    <span class="req-label">Request Body (JSON):</span>
+                    <table class="param-table">
+                        <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+                        <tr><td><code>name</code></td><td>String</td><td>Yes</td><td>ব্যবহারকারীর পুরো নাম।</td></tr>
+                        <tr><td><code>email</code></td><td>String</td><td>Yes</td><td>ভ্যালিড ইমেইল এড্রেস।</td></tr>
+                        <tr><td><code>password</code></td><td>String</td><td>Yes</td><td>কমপক্ষে ৮ অক্ষরের পাসওয়ার্ড।</td></tr>
+                    </table>
+
+                    <pre><code>{
+  "name": "Abul Kalam",
+  "email": "abul@example.com",
+  "password": "strongPassword123"
+}</code></pre>
+
+                    <span class="req-label">Success Response (201 Created):</span>
+                    <pre><code>{
+  "message": "Registration Successful",
+  "userId": "65b21c4..."
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <code class="text-lg text-slate-700 font-bold">/api/auth/login</code>
+                </div>
+                <div class="p-6">
+                    <p class="text-slate-700 mb-4">লগিন বা সাইন-ইন। ইমেইল অথবা মোবাইল নম্বর - যেকোনো একটি দিয়ে লগিন করা যাবে।</p>
+                    
+                    <span class="req-label">Request Body:</span>
+                    <table class="param-table">
+                        <tr><th>Parameter</th><th>Type</th><th>Description</th></tr>
+                        <tr><td><code>identifier</code></td><td>String</td><td>ইমেইল (user@mail.com) অথবা মোবাইল নম্বর (017XXXXXXXX)।</td></tr>
+                        <tr><td><code>password</code></td><td>String</td><td>ব্যবহারকারীর পাসওয়ার্ড।</td></tr>
+                    </table>
+
+                    <pre><code>{
+  "identifier": "01711223344", 
+  "password": "secret_password"
+}</code></pre>
+
+                    <span class="req-label">Success Response (200 OK):</span>
+                    <pre><code>{
+  "message": "Login OK",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI...", // JWT Token (পরবর্তী রিকোয়েস্টের জন্য)
+  "userId": "65b21c4..."
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <code class="text-lg text-slate-700 font-bold">/api/auth/retrieve-key</code>
+                </div>
+                <div class="p-6">
+                    <p class="text-slate-700">লগিন ছাড়াই ইউজারের API Key রিকভার করা (যদি আগে জেনারেট করা থাকে)। এটি থার্ড পার্টি অ্যাপ ইন্টিগ্রেশনের জন্য ব্যবহৃত হয়।</p>
+                    <span class="req-label">Request Body:</span>
+                    <pre><code>{
+  "identifier": "abul@example.com",
+  "password": "secret_password"
+}</code></pre>
+                    <span class="req-label">Response:</span>
+                    <pre><code>{
+  "status": "success",
+  "user_api_key": "pbsnet-xz897..." 
+}</code></pre>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-white p-4 rounded border border-slate-200">
+                    <div class="flex items-center gap-2 mb-2"><span class="method get">GET</span> <strong>/api/auth/google</strong></div>
+                    <p class="text-sm text-slate-600">গুগল লগিন ইউআরএল রিটার্ন করে।</p>
+                    <pre class="mt-2 text-xs"><code>{ "redirectUrl": "https://..." }</code></pre>
+                </div>
+                <div class="bg-white p-4 rounded border border-slate-200">
+                    <div class="flex items-center gap-2 mb-2"><span class="method post">POST</span> <strong>/api/auth/forgot-password</strong></div>
+                    <p class="text-sm text-slate-600">পাসওয়ার্ড রিসেট লিংক ইমেইলে পাঠায়।</p>
+                    <pre class="mt-2 text-xs"><code>Body: { "email": "user@mail.com" }</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section id="profile">
+            <h2 class="section-title">২. প্রোফাইল (Private Routes)</h2>
+            <div class="bg-amber-50 border-l-4 border-amber-500 p-4 mb-6 text-amber-700">
+                <i class="fas fa-lock mr-2"></i> <strong>Auth Required:</strong> নিচের সব রিকোয়েস্টের হেডারে টোকেন পাঠাতে হবে।<br>
+                <code>Authorization: Bearer <YOUR_JWT_TOKEN></code>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <code class="text-lg text-slate-700 font-bold">/api/me</code>
+                </div>
+                <div class="p-6">
+                    <p class="text-slate-700">লগিন করা ইউজারের বিস্তারিত তথ্য, ছবির লিংক এবং কাস্টম JSON ডাটা।</p>
+                    <span class="req-label">Response Example:</span>
+                    <pre><code>{
+  "full_name": "Abul Kalam",
+  "username": "kalam_pbs",
+  "email": "abul@example.com",
+  "mobile": "017XXXXXXXX",
+  "post_name": "AGM (IT)",
+  "office_name": "Dhaka PBS-1",
+  "pbs_name": "Dhaka PBS-1",
+  "api_key": "pbsnet-xxxxx",
+  "profile_pic_url": "https://api.pbsnet.com/storage/...",
+  "personal_json": {
+      "blood_group": "B+",
+      "facebook": "fb.com/kalam"
+  }
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method put">PUT</span>
+                    <code class="text-lg text-slate-700 font-bold">/api/me</code>
+                </div>
+                <div class="p-6">
+                    <p class="text-slate-700">প্রোফাইলের মূল তথ্যগুলো আপডেট করা।</p>
+                    <span class="req-label">Request Body:</span>
+                    <table class="param-table">
+                        <tr><th>Param</th><th>Description</th></tr>
+                        <tr><td><code>full_name</code></td><td>নাম পরিবর্তন করতে চাইলে।</td></tr>
+                        <tr><td><code>mobile</code></td><td>মোবাইল নম্বর।</td></tr>
+                        <tr><td><code>post_name</code></td><td>পদবী (Designation) যেমন: AGM, JE।</td></tr>
+                        <tr><td><code>office_name</code></td><td>অফিসের নাম।</td></tr>
+                        <tr><td><code>pbs_name</code></td><td>সমিতির নাম (Dropdown থেকে আসা উচিত)।</td></tr>
+                    </table>
+                    <pre><code>{
+  "full_name": "Abul Kalam Azad",
+  "post_name": "DGM (HQ)",
+  "mobile": "019XXXXXXXX"
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method patch">PATCH</span>
+                    <code class="text-lg text-slate-700 font-bold">/api/me/json</code>
+                </div>
+                <div class="p-6">
+                    <p class="text-slate-700">কাস্টম ডাটা (App Data) আপডেট করা। এটি <code>Merge</code> লজিকে কাজ করে। অর্থাৎ শুধু পাঠানো ফিল্ডগুলো আপডেট হবে, বাকিগুলো ঠিক থাকবে।</p>
+                    <span class="req-label">Request Body (Any Valid JSON Object):</span>
+                    <pre><code>{
+  "blood_group": "O+",
+  "emergency_contact": "015XXXXXXXX",
+  "is_donor": true
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <code class="text-lg text-slate-700 font-bold">/api/me/pic</code>
+                </div>
+                <div class="p-6">
+                    <p class="text-slate-700">প্রোফাইল পিকচার আপলোড। আগের ছবি থাকলে তা অটোমেটিক ডিলিট হয়ে যাবে।</p>
+                    <div class="mt-2 inline-block bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">Format: multipart/form-data</div>
+                    
+                    <span class="req-label mt-4">Form Data Key:</span>
+                    <ul class="list-disc ml-6 text-sm text-slate-600">
+                        <li><code>avatar</code>: (File) আপনার ইমেজ ফাইলটি এখানে দিন।</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <code class="text-lg text-slate-700 font-bold">/api/me/username</code>
+                </div>
+                <div class="p-6">
+                    <p class="text-slate-700">ইউনিক ইউজারনেম সেট করা।</p>
+                    <span class="req-label">Request Body:</span>
+                    <pre><code>{ "newUsername": "kalam_123" }</code></pre>
+                </div>
+            </div>
+            
+             <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <code class="text-lg text-slate-700 font-bold">/api/me/key</code>
+                </div>
+                <div class="p-6">
+                    <p class="text-slate-700">নতুন API Key জেনারেট করা। এটি সফল হলে রেসপন্সে নতুন কি (Key) পাওয়া যাবে।</p>
+                    <span class="req-label">Response:</span>
+                    <pre><code>{ "message": "Key Generated", "key": "pbsnet-xz7..." }</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section id="search">
+            <h2 class="section-title">৩. সার্চ ও পাবলিক ভিউ</h2>
+            <div class="bg-amber-50 border-l-4 border-amber-500 p-4 mb-6 text-amber-700">
+                <i class="fas fa-lock mr-2"></i> <strong>Auth Required:</strong> সার্চ করতেও লগিন থাকা আবশ্যক।
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <code class="text-lg text-slate-700 font-bold">/api/users/search</code>
+                </div>
+                <div class="p-6">
+                    <p class="text-slate-700">বিভিন্ন ফিল্টার দিয়ে ইউজার খোঁজা।</p>
+                    <span class="req-label">Query Parameters:</span>
+                    <table class="param-table">
+                        <tr><th>Query Param</th><th>Description</th></tr>
+                        <tr><td><code>pbs</code></td><td>নির্দিষ্ট সমিতির নাম দিয়ে ফিল্টার (যেমন: Dhaka PBS-1)।</td></tr>
+                        <tr><td><code>office</code></td><td>অফিসের নাম (যেমন: HQ, Zonal)।</td></tr>
+                        <tr><td><code>designation</code></td><td>পদবী দিয়ে ফিল্টার (যেমন: AGM)।</td></tr>
+                        <tr><td><code>mobile</code></td><td>মোবাইল নম্বর দিয়ে হুবহু ম্যাচ।</td></tr>
+                        <tr><td><code>username</code></td><td>ইউজারনেম দিয়ে খোঁজা।</td></tr>
+                        <tr><td><code>search</code></td><td>নামের আংশিক অংশ দিয়ে খোঁজা (Text Search)।</td></tr>
+                    </table>
+
+                    <span class="req-label">Example Request:</span>
+                    <code class="block mt-2 p-3 bg-slate-100 border border-slate-300">GET /api/users/search?pbs=Dhaka PBS-1&designation=AGM&search=Rahim</code>
+
+                    <span class="req-label">Response:</span>
+                    <pre><code>{
+  "users": [
+    {
+      "name": "Rahim Ahmed",
+      "username": "rahim_agm",
+      "pbs": "Dhaka PBS-1",
+      "designation": "AGM (O&M)",
+      "office": "Savar Zonal",
+      "pic_url": "https://..."
+    }
+  ]
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method get">GET</span>
+                    <code class="text-lg text-slate-700 font-bold">/api/profile/:username</code>
+                </div>
+                <div class="p-6">
+                    <p class="text-slate-700">নির্দিষ্ট কোনো ইউজারের পাবলিক প্রোফাইল দেখা।</p>
+                    <span class="req-label">URL Param:</span>
+                    <p class="text-sm mt-1 mb-2"><code>:username</code> - যার প্রোফাইল দেখতে চান তার ইউজারনেম।</p>
+                    
+                    <span class="req-label">Example:</span>
+                    <code>GET /api/profile/kalam_123</code>
+                    
+                    <span class="req-label">Response:</span>
+                    <pre><code>{
+  "full_name": "Abul Kalam",
+  "username": "kalam_123",
+  "post_name": "AGM",
+  "pbs_name": "Dhaka PBS-1",
+  "mobile": "017...",
+  "profile_pic_url": "https://...",
+  "personal_json": { ... }
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section id="admin">
+            <h2 class="section-title text-red-600">৪. এডমিন (System Integration)</h2>
+            <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6 text-red-700">
+                <i class="fas fa-shield-halved mr-2"></i> <strong>Admin Secret Required:</strong> এই রাউটগুলোতে Authorization টোকেন লাগে না, কিন্তু হেডারে সিক্রেট কি দিতে হয়।<br>
+                <code>x-admin-secret: YOUR_APPWRITE_API_KEY</code>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method post">POST</span>
+                    <code class="text-lg text-slate-700 font-bold">/api/admin/user-app-data/view</code>
+                </div>
+                <div class="p-6">
+                    <p class="text-slate-700">নির্দিষ্ট ইউজারের ডাটা দেখা।</p>
+                    <span class="req-label">Request Body:</span>
+                    <pre><code>{
+  "target_user_key": "pbsnet-xz7...", // টার্গেট ইউজারের API Key
+  "subclass": "billing" // (Optional) নির্দিষ্ট সেকশন দেখতে চাইলে
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="endpoint-card">
+                <div class="endpoint-header">
+                    <span class="method patch">PATCH</span>
+                    <code class="text-lg text-slate-700 font-bold">/api/admin/user-app-data</code>
+                </div>
+                <div class="p-6">
+                    <p class="text-slate-700">এডমিন বা এক্সটার্নাল অ্যাপ কর্তৃক ইউজারের ডাটা আপডেট করা।</p>
+                    
+                    <span class="req-label">Request Body:</span>
+                    <table class="param-table">
+                        <tr><th>Param</th><th>Description</th></tr>
+                        <tr><td><code>target_user_key</code></td><td>টার্গেট ইউজারের pbsNet API Key।</td></tr>
+                        <tr><td><code>subclass</code></td><td>ডাটা ক্যাটাগরি (যেমন: 'billing', 'attendance')।</td></tr>
+                        <tr><td><code>data</code></td><td>যে ডাটা অবজেক্টটি সেভ করতে চান।</td></tr>
+                    </table>
+
+                    <pre><code>{
+  "target_user_key": "pbsnet-xz7...",
+  "subclass": "billing",
+  "data": {
+      "status": "paid",
+      "expiry_date": "2026-12-31"
+  }
+}</code></pre>
+                    <p class="text-xs text-slate-500 mt-2">* এটি বিদ্যমান ডাটার সাথে নতুন ডাটা মার্জ (Merge) করবে।</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 text-white py-10 mt-20">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <p class="text-slate-400 text-sm">&copy; 2026 pbsNet System. Developed with Node.js & Appwrite.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
